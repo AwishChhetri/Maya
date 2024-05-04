@@ -2,6 +2,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import { Box } from '@chakra-ui/react'; // Import Box component from Chakra UI
 
 function Login() {
     const navigate = useNavigate();
@@ -59,7 +60,7 @@ function Login() {
     
 
     return (
-        <div className="App">
+        <Box className="App" display="flex" justifyContent="center" alignItems="center" minHeight="100vh"> {/* Centering the Box */}
             <header className="App-header">
                 <button onClick={handleGoogleLogin}>
                     <i className="fa-brands fa-google"></i>
@@ -73,7 +74,7 @@ function Login() {
                     }}
                 />
             </header>
-        </div>
+        </Box>
     );
 }
 
