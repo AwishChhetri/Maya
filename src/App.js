@@ -3,7 +3,7 @@ import Login from './Pages/Login.js'
 import Board from './Pages/Board.js'
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:8000'; 
+axios.defaults.baseURL = 'https://maya-anjz.onrender.com'; 
 function App() {
   return (
    
