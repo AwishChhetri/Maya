@@ -1,14 +1,17 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from './Pages/Login.js'
 import Board from './Pages/Board.js'
+import Home from './Pages/Home.js'
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://maya-anjz.onrender.com'; 
+axios.defaults.baseURL = 'http://maya-anjz.onrender.com'; 
+// axios.defaults.baseURL = 'http://localhost:8000';
 function App() {
   return (
    
       <Routes>
-        <Route path="/" element={<Login />} exact/>
+         <Route path="/" element={<Home />} exact/>
+        <Route path="/Login" element={<Login />} exact/>
         <Route path="/Board" element={<Board />} exact/>
       </Routes>
      
