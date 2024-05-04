@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Text, Center, Spinner, Heading, Flex, Select, Input } from '@chakra-ui/react';
-import StudentCard from '../Components/Student.js'; // Import the StudentCard component
+import StudentCard from '../Components/Student.js';
 import Notification from '../Components/Notification.js';
+import Profile from './Profile.js';
 import backgroundVideo from '../Material/flower.gif';
 
 const Board = () => {
@@ -51,33 +52,19 @@ const Board = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-     
-      <Notification />
+      <Flex justifyContent="space-between" alignItems="center">
+        <Notification />
+        <Profile />
+      </Flex>
       <Center minH="100vh">
-      {/* <video
-  src={backgroundVideo}
-  autoPlay
-  loop
-  muted
-  style={{
-    position: 'fixed', // Change 'absolute' to 'fixed'
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    zIndex: -1,
-    top: 0, // Add this to ensure the video covers the entire screen
-    left: 0, // Add this to ensure the video covers the entire screen
-  }}
-/> */}
         <Box maxW="600px" w="100%" p={4}>
           <Flex direction="column" align="center" justify="center" mb={8}>
-          <Heading as="h1" size="2xl" color="teal.600" fontWeight="bold" textAlign="center" mb={4}>
-  You deserve the best!
-</Heading>
-<Text fontSize="lg" mt={2} color="teal.500" textAlign="center">
-  Search For Your Partner.
-</Text>
-
+            <Heading as="h1" size="2xl" color="teal.600" fontWeight="bold" textAlign="center" mb={4}>
+              You deserve the best!
+            </Heading>
+            <Text fontSize="lg" mt={2} color="teal.500" textAlign="center">
+              Search For Your Partner.
+            </Text>
           </Flex>
           <Flex mb={4} justify="space-between" align="center">
             <Text fontSize="lg">Partner's Department:</Text>
