@@ -1,15 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import io from 'socket.io-client';
 import { Box, Text, Input, Button, Flex, List, ListItem } from '@chakra-ui/react';
+import axios from 'axios';
 
-const Chat = ({ senderId, receiverId, receiverName }) => {
+const MessageItem = ({ message, senderId }) => (
+  <ListItem
+    textAlign={message.senderId === senderId ? 'right' : 'left'}
+    fontSize="md"
+  >
+    <Flex justifyContent={message.senderId === senderId ? 'flex-end' : 'flex-start'}>
+      <Box borderRadius="lg" p={2} bg={message.senderId === senderId ? 'blue.500' : 'gray.200'} color={message.senderId === senderId ? 'white' : 'black'}>
+        {message.message}
+      </Box>
+    </Flex>
+  </ListItem>
+);
+
+const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const socket = io('https://puppy-mzmq.onrender.com'); // assuming your Socket.IO server is running locally on port 8000
   const username = "Abish"; // Current user's username
 
-  useEffect(() => {
+  const fetchMessages = useCallback(async () => {
+    try {
+      const response = await axios.get(`/chat-room-messages?roomId=${roomId}`);
+      const { messages } = response.data;
+      setMessages(messages);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  }, [roomId]);
 
+  useEffect(() => {
+    // Fetch messages when the component mounts
+    fetchMessages();
+
+    // Listen for incoming messages
     socket.on('chat message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
@@ -18,33 +45,27 @@ const Chat = ({ senderId, receiverId, receiverName }) => {
     return () => {
       socket.disconnect();
     };
-  }, [socket]);
+  }, [socket, fetchMessages]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = useCallback((event) => {
     setInputMessage(event.target.value);
-  };
+  }, []);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = useCallback((event) => {
     event.preventDefault();
     if (inputMessage.trim() !== '') {
-      // Send the message to the server along with the sender's and receiver's IDs
-      socket.emit('chat message', { message: inputMessage, senderId, receiverId });
+      // Emit the message to the server
+      socket.emit('chat message', { message: inputMessage, senderId, roomId });
       setInputMessage('');
     }
-  };
+  }, [socket, inputMessage, senderId, roomId]);
 
   return (
     <Box>
       <Text fontSize="xl" fontWeight="bold" textAlign="center" mb={4}>Chat</Text>
       <List spacing={3} mb={4}>
         {messages.map((message, index) => (
-          <ListItem
-            key={index}
-            textAlign={message.sender === username ? 'right' : 'left'}
-            fontSize="md"
-          >
-            {message.sender === username ? 'You' : message.sender}: {message.message}
-          </ListItem>
+          <MessageItem key={index} message={message} senderId={senderId} />
         ))}
       </List>
       <form onSubmit={handleSubmit}>

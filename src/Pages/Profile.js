@@ -11,6 +11,7 @@ const Profile = () => {
   const [studentDetails, setStudentDetails] = useState(null);
   const [matchDetails, setMatchDetails] = useState([]);
   const [selectedChatUser, setSelectedChatUser] = useState(null);
+  const [chatRoomId, setChatRoomId] = useState(null); // New state to store the chat room ID
   const userId = localStorage.getItem('_id');
 
   useEffect(() => {
@@ -33,10 +34,24 @@ const Profile = () => {
     openProfile();
   };
 
-  const handleChatIconClick = (match) => {
-    setSelectedChatUser(match);
-    closeProfile(); // Close the profile modal
-    openChat(); // Open the chat modal
+  const handleChatIconClick = async (match) => {
+    try {
+      // Call the server to establish the chat room
+      const response = await axios.post('/create-chat-room', {
+        senderId: userId,
+        receiverId: match.id
+      });
+      const roomId = response.data.roomId;
+      setChatRoomId(roomId); 
+      // Set the chat room ID
+      console.log("-----",chatRoomId)
+      setSelectedChatUser(match);
+      closeProfile(); // Close the profile modal
+      openChat(); // Open the chat modal
+    } catch (error) {
+      console.error('Error creating chat room:', error);
+    }
+    console.log("This is the great")
   };
 
   return (
@@ -63,7 +78,7 @@ const Profile = () => {
         <ModalOverlay />
         <ModalContent maxW="800px"> {/* Increase the max width */}
           <ModalBody>
-             <Text fontWeight="bold" mt={6}>Profile</Text>
+            <Text fontWeight="bold" mt={6}>Profile</Text>
             <Box p={6} borderWidth="1px" borderRadius="md" boxShadow="md">
               <Text fontSize="xl" fontWeight="semibold">{studentDetails?.Name}</Text>
               <Text fontSize="lg" mt={2}>VTU: {studentDetails?.VTU}</Text>
@@ -95,7 +110,8 @@ const Profile = () => {
             {selectedChatUser && (
               <Box mt={6}>
                 <Text fontWeight="bold" mb={2}>Chat with {selectedChatUser.name}</Text>
-                <Chat senderId={userId} receiverId={selectedChatUser.id} receiverName={selectedChatUser.name}/>
+                {/* Pass the chat room ID to the Chat component */}
+                <Chat senderId={userId} receiverId={selectedChatUser.id} receiverName={selectedChatUser.name} roomId={chatRoomId} />
               </Box>
             )}
           </ModalBody>
