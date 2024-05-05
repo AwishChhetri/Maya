@@ -1,49 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import { Box, Text, Input, Button, Flex, List, ListItem } from '@chakra-ui/react';
 
-const socket = io('http://localhost:8000');
-
-const Chat = ({ userId }) => {
-  const SENDER_ID = localStorage.getItem('_id');
-  const [message, setMessage] = useState('');
+const Chat = ({ senderId, receiverId, receiverName }) => {
   const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const socket = io('https://puppy-mzmq.onrender.com'); // assuming your Socket.IO server is running locally on port 8000
+  const username = "Abish"; // Current user's username
 
   useEffect(() => {
-    // Join the chat room when component mounts
-    socket.emit('join', userId);
 
-    // Listen for incoming messages
-    socket.on('chatMessage', ({ senderId, message }) => {
-      // Process incoming message
-      setMessages(prevMessages => [...prevMessages, { senderId, message }]);
+    socket.on('chat message', (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
-    // Clean up on component unmount
+    // Clean up socket on unmount
     return () => {
       socket.disconnect();
     };
-  }, [userId]);
+  }, [socket]);
 
-  const sendMessage = () => {
-    // Send message to server
-    socket.emit('chatMessage', { senderId: SENDER_ID, receiverId: userId, message });
-    setMessage('');
+  const handleInputChange = (event) => {
+    setInputMessage(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (inputMessage.trim() !== '') {
+      // Send the message to the server along with the sender's and receiver's IDs
+      socket.emit('chat message', { message: inputMessage, senderId, receiverId });
+      setInputMessage('');
+    }
   };
 
   return (
-    <div>
-      <h2>Chat</h2>
-      <div>
-        {messages.map((msg, index) => (
-          <div key={index}>
-            <span>{msg.senderId}: </span>
-            <span>{msg.message}</span>
-          </div>
+    <Box>
+      <Text fontSize="xl" fontWeight="bold" textAlign="center" mb={4}>Chat</Text>
+      <List spacing={3} mb={4}>
+        {messages.map((message, index) => (
+          <ListItem
+            key={index}
+            textAlign={message.sender === username ? 'right' : 'left'}
+            fontSize="md"
+          >
+            {message.sender === username ? 'You' : message.sender}: {message.message}
+          </ListItem>
         ))}
-      </div>
-      <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-      <button onClick={sendMessage}>Send</button>
-    </div>
+      </List>
+      <form onSubmit={handleSubmit}>
+        <Flex alignItems="center">
+          <Input
+            type="text"
+            value={inputMessage}
+            onChange={handleInputChange}
+            placeholder="Type your message..."
+            mr={2}
+          />
+          <Button colorScheme="blue" type="submit">Send</Button>
+        </Flex>
+      </form>
+    </Box>
   );
 };
 

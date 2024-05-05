@@ -79,7 +79,7 @@ const Board = () => {
               <option value="B.Tech - Computer Science Engineering">B.Tech - Computer Science Engineering</option>
               <option value="B.Tech - Electronics and Communication Engineering">B.Tech - Electronics and Communication Engineering</option>
               <option value="B.Tech - Mechanical Engineering">B.Tech - Mechanical Engineering</option>
-              <option value="B.Tech - Information Technology">B.Tech - Information Technology</option>
+              <option value="B.Tech - Information Technology ">B.Tech - Information Technology</option>
             </Select>
           </Flex>
           <Flex mb={4} justify="space-between" align="center">
