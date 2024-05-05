@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 import io from 'socket.io-client';
-import { Box, Text, Input, Button, Flex, List, ListItem } from '@chakra-ui/react';
+import { Box, Text, Input, Button, Flex, List, ListItem, Spinner } from '@chakra-ui/react';
 
 const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // State to track loading status
   const socket = io('https://puppy-mzmq.onrender.com');
 
-
   useEffect(() => {
-  
     socket.on('chat message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
@@ -38,15 +37,15 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
     setInputMessage(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (inputMessage.trim() !== '') {
+      setIsLoading(true); // Set loading state to true when sending message
       socket.emit('chat message', { message: inputMessage, senderId, roomId, receiverId });
       setInputMessage('');
+      setIsLoading(false); // Set loading state to false after message is sent
     }
   };
-
-  console.log("message",messages)
 
   return (
     <Box>
@@ -55,7 +54,7 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
         {messages.map((message, index) => (
           <ListItem
             key={index}
-            textAlign={message.sender === senderId ? 'right' : 'left'} // Align sender's messages to right and receiver's messages to left
+            textAlign={message.sender === senderId ? 'right' : 'left'}
             fontSize="md"
           >
             {message.senderId === senderId ? 'You' : receiverName}: {message.message}
@@ -71,7 +70,12 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
             placeholder="Type your message..."
             mr={2}
           />
-          <Button colorScheme="blue" type="submit">Send</Button>
+          {/* Show spinner when loading, otherwise show send button */}
+          {isLoading ? (
+            <Spinner size="sm" />
+          ) : (
+            <Button colorScheme="blue" type="submit">Send</Button>
+          )}
         </Flex>
       </form>
     </Box>
