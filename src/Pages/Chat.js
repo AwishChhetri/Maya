@@ -7,9 +7,10 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const socket = io('https://puppy-mzmq.onrender.com');
- 
+
 
   useEffect(() => {
+  
     socket.on('chat message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
@@ -17,7 +18,7 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
     return () => {
       socket.disconnect();
     };
-  }, [socket, roomId]); // Include roomId in the dependency array
+  }, [socket, roomId]); 
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -27,7 +28,7 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
-  }, [axios, roomId]); // Include axios and roomId in the dependency array
+  }, [axios, roomId]);
 
   useEffect(() => {
     fetchMessages();
