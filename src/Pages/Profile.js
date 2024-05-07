@@ -109,7 +109,7 @@ const Profile = () => {
           <ModalBody>
             {selectedChatUser && (
               <Box mt={6}>
-                <Text fontWeight="bold" mb={2}>Chat with {selectedChatUser.name}</Text>
+                <Text fontWeight="bold" mb={2}>Chatting with {selectedChatUser.name}</Text>
                 {/* Pass the chat room ID to the Chat component */}
                 <Chat senderId={userId} receiverId={selectedChatUser.id} receiverName={selectedChatUser.name} roomId={chatRoomId} />
               </Box>
