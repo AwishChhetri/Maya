@@ -17,7 +17,7 @@ function Home() {
       <Heading as="h1" size="2xl" mt="12" pt={60}color='white'>
          Cupid
       </Heading>
-      <Text fontSize="md" mt="4" color='white'>The place where you find you best match.</Text>
+      <Text fontSize="md" mt="4" color='white'>The place where you find your best match.</Text>
       <Button mt="4" colorScheme="gray" onClick={redirectToLogin}>Login</Button>
     </Box>
   );

@@ -61,7 +61,7 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
 
   return (
     <div>
-    <Box height="600px" overflowY="auto">
+    <Box height="400px" overflowY="auto">
     <Text fontSize="xl" fontWeight="bold" textAlign="center" mb={4}>Chat</Text>
     <List spacing={3} mb={4}>
       {messages.map((message, index) => (
