@@ -62,6 +62,8 @@ function Login() {
     return (
         <Box className="App" display="flex" justifyContent="center" alignItems="center" minHeight="100vh"> {/* Centering the Box */}
             <header className="App-header">
+           <h1 ontSize="md" mt="4" color='red'>Login Allowed Only With The VTU mail.</h1>
+
                 <button onClick={handleGoogleLogin}>
                     <i className="fa-brands fa-google"></i>
                     Continue with Google

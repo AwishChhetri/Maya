@@ -13,11 +13,11 @@ function Home() {
 
   return (
     <Box textAlign="center" m={0} backgroundColor="rgb(240, 180, 158)" backgroundImage={`url(${floswer})`} backgroundSize="cover" minHeight="100vh" px={4}>
-      <h1 ontSize="md" mt="4" color='white'>Login Allowed Only With The VTU mail.</h1>
+      <h1 ontSize="md" mt="4" color='red'>For Batch(2025,2026,2027)</h1>
       <Heading as="h1" size="2xl" mt="12" pt={60}color='white'>
-         Puppy love!
+         Cupid
       </Heading>
-      <Text fontSize="md" mt="4" color='white'>Please log in to continue:</Text>
+      <Text fontSize="md" mt="4" color='white'>The place where you find you best match.</Text>
       <Button mt="4" colorScheme="gray" onClick={redirectToLogin}>Login</Button>
     </Box>
   );
