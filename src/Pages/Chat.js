@@ -84,13 +84,15 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
         </List>
       </Box>
       <form onSubmit={handleSubmit} style={{ marginTop: "auto", marginBottom: "1rem" }}>
-        <Flex alignItems="center" flexDirection={{ base: 'column', md: 'row' }}>
+        <Flex alignItems="center" flexDirection="row" flexWrap="wrap"> {/* Ensure items wrap to new line if space is not enough */}
           <Input
             type="text"
             value={inputMessage}
             onChange={handleInputChange}
             placeholder="Type your message..."
-            mb={{ base: 2, md: 0 }}
+            mb={{ base: 2, md: 0 }} 
+            mr={{ base: isLoading ? 0 : 2, md: isLoading ? 2 : 0 }} 
+            flex="1" 
           />
           {isLoading ? (
             <Spinner size="sm" />
