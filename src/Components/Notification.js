@@ -63,7 +63,7 @@ const Notification = () => {
         {matchRequestDetails && matchRequestDetails.length > 0 ? (
           <Text fontSize="sm" ml={2} color="blue.500">You have liked {matchRequestDetails.length} people.</Text>
         ) : (
-          <Text fontSize="sm" ml={2} color="blue.500">You Likes</Text>
+          <Text fontSize="sm" ml={2} color="blue.500">Your Likes</Text>
         )}
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>

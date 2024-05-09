@@ -77,8 +77,8 @@ const Board = () => {
             <Text fontSize="sm" color="black.500" textAlign="center" mb={4}>
               Cupid picker will know your preference and match you with the best Partner. Fill out the form by clicking the "Cupid Picker" button.
             </Text>
-            <Text fontSize="lg" color="black" textAlign="center" >
-              From the below list, you will have to choose your best 8!
+            <Text fontSize="sm" color="black" textAlign="center" >
+              From the below list, you will have to choose your best 8.
             </Text>
           </Flex>
           <Flex mb={4} justify="space-between" align="center">
