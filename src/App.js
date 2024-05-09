@@ -4,7 +4,7 @@ import Board from './Pages/Board.js'
 import Home from './Pages/Home.js'
 import axios from 'axios';
 import Chat from './Pages/Chat.js';
-axios.defaults.baseURL = 'https://puppy-mzmq.onrender.com'; 
+ axios.defaults.baseURL = 'https://puppy-mzmq.onrender.com'; 
 //  axios.defaults.baseURL = 'http://localhost:8000';
 function App() {
   return (

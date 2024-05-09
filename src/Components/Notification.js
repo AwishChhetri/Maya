@@ -70,8 +70,8 @@ const Notification = () => {
         <ModalOverlay />
         <ModalContent maxW="600px"> {/* Set max width here */}
           <ModalBody>
-            <Text fontWeight="bold">Match Requests:</Text>
-            <Text>You can connect after accepting the request.</Text>
+            <Text fontWeight="bold">Your Likes</Text>
+            <Text>Cupid will match you if their happens to be a mutual liking.</Text>
             {matchRequestDetails.map((request, index) => (
               <Box key={index} borderWidth="1px" borderRadius="md" p={3} mb={2}>
                 <Flex align="center">
