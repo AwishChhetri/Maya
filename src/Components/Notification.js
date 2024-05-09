@@ -71,7 +71,12 @@ const Notification = () => {
         <ModalContent maxW="600px"> {/* Set max width here */}
           <ModalBody>
             <Text fontWeight="bold">Your Likes</Text>
-            <Text>Cupid will match you if their happens to be a mutual liking.</Text>
+            
+            <Text>
+            <span style={{ color: "hsl(330, 70%, 65%)" }}>Cupid</span>{" "}will match you if there happens to be a mutual liking.{" "}
+  <span style={{ color: "hsl(210, 70%, 65%)" }}>Good news!</span>{" "}
+  <span style={{ color: "hsl(330, 70%, 65%)" }}>Cupid</span>{" "}won't let anyone know that you have liked their profile.
+</Text>
             {matchRequestDetails.map((request, index) => (
               <Box key={index} borderWidth="1px" borderRadius="md" p={3} mb={2}>
                 <Flex align="center">
