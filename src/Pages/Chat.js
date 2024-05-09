@@ -10,7 +10,7 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
   const chatBoxRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io('https://puppy-mzmq.onrender.com');
+    const newSocket = io('http://localhost:8000');
     setSocket(newSocket);
 
     return () => newSocket.disconnect();

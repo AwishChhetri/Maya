@@ -71,7 +71,7 @@ const Profile = () => {
         {studentDetails ? (
           <Text fontSize="sm" ml={2} color="blue.500">{studentDetails.VTU}</Text>
         ) : (
-          <Text fontSize="sm" ml={2} color="blue.500">Click here...</Text>
+          <Text fontSize="sm" ml={2} color="blue.500">Profile</Text>
         )}
       </Box>
       <Modal isOpen={isProfileOpen} onClose={closeProfile}>

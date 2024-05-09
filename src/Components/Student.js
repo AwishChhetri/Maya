@@ -44,9 +44,13 @@ const StudentCard = ({ name, VTU, degree, id }) => {
         <Box mr={2} display="flex" alignItems="center" onClick={submitHandler}>
           <IconButton
             size="md"
-            colorScheme="red"
-            aria-label="Send Match Request"
-            icon={<FaHeart />}
+            colorScheme="pink"
+    bgGradient="linear(to-r, red.400, pink.400)"
+    _hover={{
+      bgGradient: 'linear(to-r, pink.400, red.400)',
+    }}
+    icon={<FaHeart  />}
+            
             isLoading={loading}
             loadingText="Sending..."
           />

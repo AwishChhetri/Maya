@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Text, useDisclosure, Modal, ModalOverlay, ModalContent, ModalBody, Flex, IconButton, Spinner } from '@chakra-ui/react';
-import { IoNotifications } from 'react-icons/io5';
+import { GiHeartWings } from "react-icons/gi";
 import { FaUser } from 'react-icons/fa';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import axios from 'axios';
@@ -59,11 +59,11 @@ const Notification = () => {
         display="flex"
         alignItems="center"
       >
-        <IoNotifications style={{ marginRight: '7px', fontSize: '24px' }} />
+        <GiHeartWings  style={{ marginRight: '7px', fontSize: '24px' }} />
         {matchRequestDetails && matchRequestDetails.length > 0 ? (
-          <Text fontSize="sm" ml={2} color="blue.500">You have {matchRequestDetails.length} new match requests</Text>
+          <Text fontSize="sm" ml={2} color="blue.500">You have liked {matchRequestDetails.length} people.</Text>
         ) : (
-          <Text fontSize="sm" ml={2} color="blue.500">No requests yet! Have Patience.</Text>
+          <Text fontSize="sm" ml={2} color="blue.500">You Likes</Text>
         )}
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
