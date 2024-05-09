@@ -88,7 +88,7 @@ const Board = () => {
 
               <option value="All">All departments</option>
               <option value="B.Tech - Aeronautical Engineering">B.Tech - Aeronautical Engineering</option>
-              <option value="B.Tech - Information Technology ">B.Tech - Information Technology</option>
+              <option value="B.Tech - Information Technology">B.Tech - Information Technology</option>
               
               <option value="B.Tech - Bio-Medical Engineering">B.Tech - Bio-Medical Engineering</option>
               <option value="B.Tech - Bio-Technology Engineering">B.Tech - Bio-Technology Engineering</option>
