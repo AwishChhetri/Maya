@@ -16,7 +16,7 @@ root.render(
     </BrowserRouter>
     </ChakraProvider>
     </GoogleOAuthProvider>
-    <ToastContainer/>
+    <ToastContainer autoClose={500}/>
   </React.StrictMode>
 );
 
