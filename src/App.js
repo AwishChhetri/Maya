@@ -6,11 +6,11 @@ import axios from 'axios';
 import Chat from './Pages/Chat.js';
 import Form from './Pages/Form.js'
 //  axios.defaults.baseURL = 'http://cupidpuppy-env.eba-3rwswcn9.ap-south-1.elasticbeanstalk.com/'; 
-//  axios.defaults.baseURL = 'http://localhost:8000';
+ axios.defaults.baseURL = 'http://localhost:8000';
 
 
 
-axios.defaults.baseURL = 'https://puppy-mzmq.onrender.com';
+// axios.defaults.baseURL = 'https://puppy-mzmq.onrender.com';
 
 function App() {
   return (

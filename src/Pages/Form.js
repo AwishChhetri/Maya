@@ -102,13 +102,21 @@ const Form = () => {
         console.log('Test already taken');
         return;
       }
-  
+      const selectedValuesArray = Object.values(selectedOptions);
       // If all fields are filled and Picker status is true, proceed with submission
-      console.log('Selected options:', selectedOptions);
+      console.log('Selected options:', selectedValuesArray);
+  
+      // Extract only the values from selectedOptions
+      const selectedValues = {};
+      for (const key in selectedOptions) {
+        if (selectedOptions.hasOwnProperty(key)) {
+          selectedValues[key] = selectedOptions[key].value;
+        }
+      }
   
       // Send data to the server
       const response = await axios.post('/cupidPicker', {
-        selectedOptions,
+        selectedOptions: selectedValuesArray, // Send only the values to the backend
         userId,
         sex,
         lookingFor
@@ -126,12 +134,12 @@ const Form = () => {
   return (
     <VStack spacing={4}>
       {/* Display an inline message if Picker status is false */}
-      {pickerStatus === false && (
+      {pickerStatus === true && (
         <Text color="red">Test already taken</Text>
       )}
 
       {/* Render the form only if the test is not taken */}
-      {pickerStatus !== false && (
+      {pickerStatus !== true && (
         <div>
           <Text color="black" fontWeight="bold">Your sex</Text>
           <RadioGroup isRequired onChange={(value) => setSex(value)} value={sex}>
@@ -164,3 +172,4 @@ const Form = () => {
 };
 
 export default Form;
+
