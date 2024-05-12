@@ -4,7 +4,7 @@ import { GiHeartWings } from "react-icons/gi";
 import { FaUser } from 'react-icons/fa';
 import { FcApproval, FcCancel } from 'react-icons/fc';
 import axios from 'axios';
-
+import {toast} from 'react-toastify'
 const Notification = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [matchRequestDetails, setMatchRequestDetails] = useState([]);
@@ -34,7 +34,7 @@ const Notification = () => {
         approvalStatus: approvalStatus,
         userId: userId 
       });
-      console.log('Approval submitted successfully');
+      toast.success('Successfully removed!');
     } catch (error) {
       console.error('Error submitting approval:', error);
     } finally {

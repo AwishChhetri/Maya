@@ -1,27 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { Radio, RadioGroup, VStack, Button, Text } from '@chakra-ui/react';
+import { Radio, RadioGroup, VStack, Button,Text, useRadioGroup,useRadio, Box,HStack} from '@chakra-ui/react';
 import axios from 'axios';
+import {toast} from 'react-toastify';
+import {useNavigate } from 'react-router-dom'
+
+
+
+function RadioCard({ children, isChecked, color, ...props }) {
+  const { getInputProps, getCheckboxProps } = useRadio(props);
+  const input = getInputProps();
+  const checkbox = getCheckboxProps();
+
+  return (
+    <VStack as="label" alignItems="start">
+      <input {...input} />
+      <HStack {...checkbox} spacing={2} cursor="pointer">
+        <Box
+          borderWidth="1px"
+          borderRadius="md"
+          boxShadow="md"
+          px={5}
+          py={3}
+          bgColor={isChecked ? color : 'white'}
+          color={isChecked ? 'white' : 'black'}
+          _checked={{
+            bg: color,
+            color: 'white',
+            borderColor: color,
+          }}
+          _focus={{
+            boxShadow: 'outline',
+          }}
+        >
+          {children}
+        </Box>
+      </HStack>
+    </VStack>
+  );
+}
 
 const Question = ({ question, options, selectedValue, onChange }) => {
+  const [boxColor, setBoxColor] = useState('teal.600');
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    name: question,
+    value: selectedValue,
+    onChange,
+  });
+
+  const group = getRootProps();
+
+  
+
   return (
-    <VStack spacing={2}>
-      <Text color="black" fontWeight="bold">{question}</Text>
-      <RadioGroup onChange={onChange} value={selectedValue}>
-        {options.map((option, index) => (
-          <Radio key={index} value={`${index + 1}`}>{option}</Radio>
-        ))}
-      </RadioGroup>
+    <VStack spacing={2} {...group}>
+      <Text color="black" fontSize={18} fontWeight="bold">{question}</Text>
+      {options.map((option, index) => {
+        const radio = getRadioProps({ value: `${index + 1}` });
+        return (
+          <RadioCard key={index} {...radio} color={boxColor}>
+            {option}
+          </RadioCard>
+        );
+      })}
     </VStack>
   );
 };
 
+
+
 const Form = () => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [sex, setSex] = useState('');
+  const [name, setName] = useState('');
   const [lookingFor, setLookingFor] = useState('');
   const [pickerStatus, setPickerStatus] = useState(null);
   const userId = localStorage.getItem('_id');
-
+  const navigate=useNavigate()
   const questions = [
     {
       question: "What are your long-term goals beyond university, and how do you see a partner fitting into those plans?",
@@ -75,9 +129,10 @@ const Form = () => {
       .then(response => {
         console.log('Student details:', response.data);
         setPickerStatus(response.data.PickerStatus);
+        setName(response.data.name)
       })
       .catch(error => {
-        console.error('Error fetching student details:', error);
+        console.log('Check your Network!');
       });
   }, [userId]);
 
@@ -93,18 +148,18 @@ const Form = () => {
       // Check if all questions are answered
       const isAllQuestionsAnswered = questions.every(question => selectedOptions[question.key]);
       if (!isAllQuestionsAnswered || !sex || !lookingFor) {
-        console.log('Please fill out all fields.');
+        toast.warning('Please fill all the fields.');
         return; // Exit early if any field is empty
       }
   
       // Check if Picker status is false
-      if (pickerStatus === false) {
-        console.log('Test already taken');
+      if (pickerStatus === true) {
+        toast.info("Form already submitted !",);
         return;
       }
       const selectedValuesArray = Object.values(selectedOptions);
       // If all fields are filled and Picker status is true, proceed with submission
-      console.log('Selected options:', selectedValuesArray);
+      // console.log('Selected options:', selectedValuesArray);
   
       // Extract only the values from selectedOptions
       const selectedValues = {};
@@ -121,8 +176,17 @@ const Form = () => {
         sex,
         lookingFor
       });
+
+      if(response.status==200){
+        navigate('/board')
+        toast.success("Your preference have been received!")
+      }
+      else{
+        toast.error("Fail to submit!")
+      }
   
-      console.log('Server response:', response.data);
+      // console.log('Server response:', response.data);
+      toast.error("Fail to submit!")
       // Optionally, you can perform additional actions based on the server response
     } catch (error) {
       console.error('Error sending data:', error);
@@ -132,42 +196,80 @@ const Form = () => {
   
 
   return (
-    <VStack spacing={4}>
-      {/* Display an inline message if Picker status is false */}
-      {pickerStatus === true && (
-        <Text color="red">Test already taken</Text>
-      )}
-
-      {/* Render the form only if the test is not taken */}
-      {pickerStatus !== true && (
-        <div>
-          <Text color="black" fontWeight="bold">Your sex</Text>
-          <RadioGroup isRequired onChange={(value) => setSex(value)} value={sex}>
-            <Radio value="Male">Male</Radio>
-            <Radio value="Female">Female</Radio>
-            <Radio value="Others">Others</Radio>
-          </RadioGroup>
-          <Text color="black" fontWeight="bold">You are looking for</Text>
-          <RadioGroup isRequired onChange={(value) => setLookingFor(value)} value={lookingFor}>
-            <Radio value="Male">Male</Radio>
-            <Radio value="Female">Female</Radio>
-            <Radio value="Others">Others</Radio>
-          </RadioGroup>
-
-          {questions.map(({ question, options, key }) => (
+    <VStack spacing={4} align="center" p={6}>
+    <Text color="black" fontWeight="bold" fontSize={20}>{name}</Text>
+  
+    {/* Display an inline message if Picker status is false */}
+    {pickerStatus === true && (
+      <Text color="red">Form Already submitted.</Text>
+    )}
+  
+    {/* Render the form only if the test is not taken */}
+    {pickerStatus !== true && (
+      <div>
+        <VStack spacing={8}>
+          <HStack spacing={4}>
+          <Box
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              mb={4}
+              p={4}
+              position="relative"
+              boxShadow="lg"
+            >
             <Question
-              key={key}
-              question={question}
-              options={options}
-              selectedValue={selectedOptions[key]}
-              onChange={(value) => handleRadioChange(key, value)}
-            />
-          ))}
+              question="Your gender:"
+              options={["Male", "Female"]}
+              selectedValue={sex}
+              onChange={setSex}
+            /></Box>
+             <Box
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              mb={4}
+              p={4}
+              position="relative"
+              boxShadow="lg"
+            >
+            <Question
+              question="You are looking for"
+              options={["Male", "Female"]}
+              selectedValue={lookingFor}
+              onChange={setLookingFor}
+            /></Box>
+          </HStack>
+  
+          <VStack spacing={4}>
+            {questions.map(({ question, options, key }) => (
+              
+              <Box
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              mb={4}
+              p={4}
+              position="relative"
+              boxShadow="lg"
+            >
+              <Question
+                key={key}
+                question={question}
+                options={options}
+                selectedValue={selectedOptions[key]}
+                onChange={(value) => handleRadioChange(key, value)}
+              /></Box>
+            ))}
+          </VStack>
+        </VStack>
+  
+        <Button color="teal.600" size="lg" align="right" spacing={4} onClick={handleSubmit}>Submit</Button>
 
-          <Button colorScheme="blue" onClick={handleSubmit}>Submit</Button>
-        </div>
-      )}
-    </VStack>
+      </div>
+    )}
+  </VStack>
+  
   );
 };
 

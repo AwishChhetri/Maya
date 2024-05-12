@@ -4,7 +4,7 @@ import { useState } from 'react'; // Import useState hook
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { Box, Spinner } from '@chakra-ui/react'; // Import Spinner component from Chakra UI
-
+import { toast } from "react-toastify";
 function Login() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false); // State variable for loading
@@ -30,7 +30,10 @@ function Login() {
             setIsLoading(false); // Set loading to false after axios call completes
         }
     };
-
+  
+    
+    
+    
     const emailVerification = async (data) => {
         if (data.email_verified === true) {
             setIsLoading(true); // Set loading to true when starting axios call
@@ -48,19 +51,23 @@ function Login() {
                     // Token expiration time (5 hours in milliseconds)
                     const expirationTime = Date.now() + 5 * 60 * 60 * 1000;
                     localStorage.setItem('tokenExpiration', expirationTime); // Save token expiration time
+                    
                     navigate('/board');
+                    toast.success("Login successful!");
                 } else {
-                    console.log("Use your VTU mail id.");
+                    
+                    toast.error("Use your VTU mail id!");
                     navigate('/login'); // Redirect to /login if backend response is not 200
                 }
             } catch (error) {
-                console.error(error);
+                toast.error("Use your VTU mail id!");
                 navigate('/login'); // Redirect to /login on error
             } finally {
                 setIsLoading(false); // Set loading to false after axios call completes
             }
         } else {
-            console.log("Email not verified");
+            toast.error("Not a verified User!");
+            
             navigate('/login'); // Redirect to /login if email is not verified
         }
     };

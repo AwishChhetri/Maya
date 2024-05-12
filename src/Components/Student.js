@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Text, Button, IconButton, Flex } from '@chakra-ui/react';
 import { FaHeart } from "react-icons/fa";
-
+import {toast} from 'react-toastify'
 const StudentCard = ({ name, VTU, degree, id }) => {
   const [loading, setLoading] = useState(false);
   const userId = localStorage.getItem('_id');
@@ -16,9 +16,12 @@ const StudentCard = ({ name, VTU, degree, id }) => {
       });
 
       if (res.status === 200) {
-        console.log('Match request sent:', res.data.message);
-      } else if (res.status === 400) {
-        console.log('Error:', res.data.error);
+        toast.success(`${res.data.message}`);
+      } else if (res.status === 201) {
+        toast.error(`${res.data.message}`);
+      }
+      else if (res.status === 400) {
+        toast.warning(`${res.data.message}`);
       }
     } catch (error) {
       console.error('Error sending match request:', error);
