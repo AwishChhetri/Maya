@@ -1,24 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Radio, RadioGroup, VStack, Button, Text } from '@chakra-ui/react';
+import axios from 'axios';
+
+const Question = ({ question, options, selectedValue, onChange }) => {
+  return (
+    <VStack spacing={2}>
+      <Text color="black" fontWeight="bold">{question}</Text>
+      <RadioGroup onChange={onChange} value={selectedValue}>
+        {options.map((option, index) => (
+          <Radio key={index} value={`${index + 1}`}>{option}</Radio>
+        ))}
+      </RadioGroup>
+    </VStack>
+  );
+};
 
 const Form = () => {
-  // State to store the selected options for each question
-  const [selectedOptions, setSelectedOptions] = useState({
-    sex: '',
-    lookingFor: '',
-    question1: '',
-    question2: '',
-    question3: '',
-    question4: '',
-    question5: '',
-    question6: '',
-    question7: '',
-    question8: '',
-    question9: '',
-    question10: ''
-  });
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [sex, setSex] = useState('');
+  const [lookingFor, setLookingFor] = useState('');
+  const [pickerStatus, setPickerStatus] = useState(null);
+  const userId = localStorage.getItem('_id');
 
-  // Function to handle radio button change for each question
+  const questions = [
+    {
+      question: "What are your long-term goals beyond university, and how do you see a partner fitting into those plans?",
+      options: ["Career aspirations", "Personal growth objectives", "Relationship and family goals"],
+      key: 'question1'
+    },
+    {
+      question: "What role does trust play in your relationships, and how do you establish and maintain it?",
+      options: ["Building trust over time through honesty and reliability", "Being transparent about feelings and intentions", "Setting boundaries and respecting each other's privacy"],
+      key: 'question3'
+    },
+    {
+      question: "How do you prioritize self-care and personal well-being while being in a relationship?",
+      options: ["Balancing time between personal and relationship commitments", "Supporting each other's individual growth and goals", "Communicating needs for alone time or self-care activities"],
+      key: 'question4'
+    },
+    {
+      question: "What does commitment mean to you, and how do you demonstrate it in a relationship?",
+      options: ["Investing time and effort into building a strong foundation", "Being emotionally available and supportive", "Making sacrifices for the well-being of the relationship"],
+      key: 'question5'
+    },
+    {
+      question: "How do you navigate differences in values or beliefs with a partner?",
+      options: ["Respecting each other's perspectives while finding common ground", "Having open and honest discussions about values and beliefs", "Agreeing to disagree on certain topics while focusing on shared values"],
+      key: 'question6'
+    },
+    {
+      question: "What are your views on intimacy in a relationship, both physical and emotional?",
+      options: ["Valuing both physical and emotional connection", "Building intimacy through trust, communication, and vulnerability", "Respecting boundaries and pacing intimacy based on comfort levels"],
+      key: 'question7'
+    },
+    {
+      question: "How do you manage expectations in a relationship, both your own and your partner's?",
+      options: ["Setting realistic expectations and communicating them clearly", "Being flexible and adaptable to changing circumstances", "Discussing expectations openly and revisiting them as needed"],
+      key: 'question8'
+    },
+    {
+      question: "What role do friendships and social circles play in your life, and how do you integrate them into your relationship?",
+      options: ["Balancing time between friends and partner", "Introducing partner to friends and participating in social activities together", "Maintaining independence while still prioritizing quality time with partner"],
+      key: 'question9'
+    },
+    {
+      question: "How do you envision handling long-distance or post-graduation transitions in a relationship?",
+      options: ["Communicating openly about future plans and expectations", "Prioritizing regular communication and visits when apart", "Being supportive of each other's individual pursuits while maintaining connection"],
+      key: 'question10'
+    }
+  ];
+  useEffect(() => {
+    // Fetch student details and Picker status
+    axios.post('/studentDetails', { userId })
+      .then(response => {
+        console.log('Student details:', response.data);
+        setPickerStatus(response.data.PickerStatus);
+      })
+      .catch(error => {
+        console.error('Error fetching student details:', error);
+      });
+  }, [userId]);
+
   const handleRadioChange = (question, value) => {
     setSelectedOptions({
       ...selectedOptions,
@@ -26,85 +88,79 @@ const Form = () => {
     });
   };
 
-  // Function to handle form submission
-  const handleSubmit = () => {
-    console.log('Selected options:', selectedOptions);
+  const handleSubmit = async () => {
+    try {
+      // Check if all questions are answered
+      const isAllQuestionsAnswered = questions.every(question => selectedOptions[question.key]);
+      if (!isAllQuestionsAnswered || !sex || !lookingFor) {
+        console.log('Please fill out all fields.');
+        return; // Exit early if any field is empty
+      }
+  
+      // Check if Picker status is false
+      if (pickerStatus === false) {
+        console.log('Test already taken');
+        return;
+      }
+  
+      // If all fields are filled and Picker status is true, proceed with submission
+      console.log('Selected options:', selectedOptions);
+  
+      // Send data to the server
+      const response = await axios.post('/cupidPicker', {
+        selectedOptions,
+        userId,
+        sex,
+        lookingFor
+      });
+  
+      console.log('Server response:', response.data);
+      // Optionally, you can perform additional actions based on the server response
+    } catch (error) {
+      console.error('Error sending data:', error);
+      // Handle error appropriately
+    }
   };
+  
 
   return (
     <VStack spacing={4}>
-      <Text color="black" fontWeight="bold">Your sex</Text>
-      <RadioGroup isRequired onChange={(value) => handleRadioChange('sex', value)} value={selectedOptions['sex']}>
-        <Radio value="Male">Male</Radio>
-        <Radio value="Female">Female</Radio>
-        <Radio value="Others">Others</Radio>
-      </RadioGroup>
-      <Text color="black" fontWeight="bold">You are looking for</Text>
-      <RadioGroup isRequired onChange={(value) => handleRadioChange('lookingFor', value)} value={selectedOptions['lookingFor']}>
-        <Radio value="Male">Male</Radio>
-        <Radio value="Female">Female</Radio>
-        <Radio value="Others">Others</Radio>
-      </RadioGroup>
+      {/* Display an inline message if Picker status is false */}
+      {pickerStatus === false && (
+        <Text color="red">Test already taken</Text>
+      )}
 
-      <Text color="black" fontWeight="bold">What are your long-term goals beyond university, and how do you see a partner fitting into those plans?</Text>
-      <RadioGroup isRequired onChange={(value) => handleRadioChange('question1', value)} value={selectedOptions['question1']}>
-        <Radio value="Career aspirations">Career aspirations</Radio>
-        <Radio value="Personal growth objectives">Personal growth objectives</Radio>
-        <Radio value="Relationship and family goals">Relationship and family goals</Radio>
-      </RadioGroup>
+      {/* Render the form only if the test is not taken */}
+      {pickerStatus !== false && (
+        <div>
+          <Text color="black" fontWeight="bold">Your sex</Text>
+          <RadioGroup isRequired onChange={(value) => setSex(value)} value={sex}>
+            <Radio value="Male">Male</Radio>
+            <Radio value="Female">Female</Radio>
+            <Radio value="Others">Others</Radio>
+          </RadioGroup>
+          <Text color="black" fontWeight="bold">You are looking for</Text>
+          <RadioGroup isRequired onChange={(value) => setLookingFor(value)} value={lookingFor}>
+            <Radio value="Male">Male</Radio>
+            <Radio value="Female">Female</Radio>
+            <Radio value="Others">Others</Radio>
+          </RadioGroup>
 
-<Text color="black" fontWeight="bold">What role does trust play in your relationships, and how do you establish and maintain it?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question3', value)} value={selectedOptions['question3']}>
-        <Radio value="Building trust over time through honesty and reliability">Building trust over time through honesty and reliability</Radio>
-        <Radio value="Being transparent about feelings and intentions">Being transparent about feelings and intentions</Radio>
-        <Radio value="Setting boundaries and respecting each other's privacy">Setting boundaries and respecting each other's privacy</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">How do you prioritize self-care and personal well-being while being in a relationship?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question4', value)} value={selectedOptions['question4']}>
-        <Radio value="Balancing time between personal and relationship commitments">Balancing time between personal and relationship commitments</Radio>
-        <Radio value="Supporting each other's individual growth and goals">Supporting each other's individual growth and goals</Radio>
-        <Radio value="Communicating needs for alone time or self-care activities">Communicating needs for alone time or self-care activities</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">What does commitment mean to you, and how do you demonstrate it in a relationship?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question5', value)} value={selectedOptions['question5']}>
-        <Radio value="Investing time and effort into building a strong foundation">Investing time and effort into building a strong foundation</Radio>
-        <Radio value="Being emotionally available and supportive">Being emotionally available and supportive</Radio>
-        <Radio value="Making sacrifices for the well-being of the relationship">Making sacrifices for the well-being of the relationship</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">How do you navigate differences in values or beliefs with a partner?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question6', value)} value={selectedOptions['question6']}>
-        <Radio value="Respecting each other's perspectives while finding common ground">Respecting each other's perspectives while finding common ground</Radio>
-        <Radio value="Having open and honest discussions about values and beliefs">Having open and honest discussions about values and beliefs</Radio>
-        <Radio value="Agreeing to disagree on certain topics while focusing on shared values">Agreeing to disagree on certain topics while focusing on shared values</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">What are your views on intimacy in a relationship, both physical and emotional?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question7', value)} value={selectedOptions['question7']}>
-        <Radio value="Valuing both physical and emotional connection">Valuing both physical and emotional connection</Radio>
-        <Radio value="Building intimacy through trust, communication, and vulnerability">Building intimacy through trust, communication, and vulnerability</Radio>
-        <Radio value="Respecting boundaries and pacing intimacy based on comfort levels">Respecting boundaries and pacing intimacy based on comfort levels</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">How do you manage expectations in a relationship, both your own and your partner's?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question8', value)} value={selectedOptions['question8']}>
-        <Radio value="Setting realistic expectations and communicating them clearly">Setting realistic expectations and communicating them clearly</Radio>
-        <Radio value="Being flexible and adaptable to changing circumstances">Being flexible and adaptable to changing circumstances</Radio>
-        <Radio value="Discussing expectations openly and revisiting them as needed">Discussing expectations openly and revisiting them as needed</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">What role do friendships and social circles play in your life, and how do you integrate them into your relationship?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question9', value)} value={selectedOptions['question9']}>
-        <Radio value="Balancing time between friends and partner">Balancing time between friends and partner</Radio>
-        <Radio value="Introducing partner to friends and participating in social activities together">Introducing partner to friends and participating in social activities together</Radio>
-        <Radio value="Maintaining independence while still prioritizing quality time with partner">Maintaining independence while still prioritizing quality time with partner</Radio>
-      </RadioGroup>
-<Text color="black" fontWeight="bold">How do you envision handling long-distance or post-graduation transitions in a relationship?</Text>
-      <RadioGroup onChange={(value) => handleRadioChange('question10', value)} value={selectedOptions['question10']}>
-        <Radio value="Communicating openly about future plans and expectations">Communicating openly about future plans and expectations</Radio>
-        <Radio value="Prioritizing regular communication and visits when apart">Prioritizing regular communication and visits when apart</Radio>
-        <Radio value="Being supportive of each other's individual pursuits while maintaining connection">Being supportive of each other's individual pursuits while maintaining connection</Radio>
-      </RadioGroup>
+          {questions.map(({ question, options, key }) => (
+            <Question
+              key={key}
+              question={question}
+              options={options}
+              selectedValue={selectedOptions[key]}
+              onChange={(value) => handleRadioChange(key, value)}
+            />
+          ))}
 
-      <Button colorScheme="blue" onClick={handleSubmit}>Submit</Button>
+          <Button colorScheme="blue" onClick={handleSubmit}>Submit</Button>
+        </div>
+      )}
     </VStack>
   );
-}
+};
 
 export default Form;
