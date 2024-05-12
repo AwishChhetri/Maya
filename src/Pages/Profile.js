@@ -85,6 +85,11 @@ const Profile = () => {
               <Text fontSize="md">Degree: {studentDetails?.Degree}</Text>
             </Box>
             <Text fontWeight="bold" mt={6}>Matches:</Text>
+            <Text pb={2}>
+            <span style={{ color: "hsl(330, 70%, 65%)" }}>Cupid:</span>{" "}
+  <span style={{ color: "hsl(210, 70%, 65%)" }}>Hey!</span>{" "}Once{" "}
+  <span style={{ color: "hsl(330, 70%, 65%)" }}></span>{" "}I find a match for <span style={{ color: "hsl(330, 70%, 65%)" }}>YOU</span>, I will list it below and you can start your conversation.
+</Text>
             {matchDetails && matchDetails.map((match, index) => (
               <Box key={index} borderWidth="1px" borderRadius="md" p={3} mb={2} onClick={() => handleChatIconClick(match)}>
                 <Flex align="center">

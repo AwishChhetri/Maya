@@ -127,7 +127,7 @@ const Form = () => {
     // Fetch student details and Picker status
     axios.post('/studentDetails', { userId })
       .then(response => {
-        console.log('Student details:', response.data);
+        // console.log('Student details:', response.data);
         setPickerStatus(response.data.PickerStatus);
         setName(response.data.name)
       })
@@ -186,7 +186,6 @@ const Form = () => {
       }
   
       // console.log('Server response:', response.data);
-      toast.error("Fail to submit!")
       // Optionally, you can perform additional actions based on the server response
     } catch (error) {
       console.error('Error sending data:', error);
@@ -201,7 +200,7 @@ const Form = () => {
   
     {/* Display an inline message if Picker status is false */}
     {pickerStatus === true && (
-      <Text color="red">Form Already submitted.</Text>
+      <Text color="red">Form already submitted.</Text>
     )}
   
     {/* Render the form only if the test is not taken */}
