@@ -174,7 +174,8 @@ const Form = () => {
         selectedOptions: selectedValuesArray, // Send only the values to the backend
         userId,
         sex,
-        lookingFor
+        lookingFor,
+        pickerStatus,
       });
 
       if(response.status==200){

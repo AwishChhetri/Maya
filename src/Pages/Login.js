@@ -52,7 +52,7 @@ function Login() {
                     const expirationTime = Date.now() + 5 * 60 * 60 * 1000;
                     localStorage.setItem('tokenExpiration', expirationTime); // Save token expiration time
                     
-                    navigate('/board');
+                    navigate('/a/board');
                     toast.success("Login successful!");
                 } else {
                     

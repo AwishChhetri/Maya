@@ -71,7 +71,7 @@ const Board = () => {
               }}
               leftIcon={<GiCupidonArrow />}
               mb={2}
-            ><Link to='/form'>
+            ><Link to='/a/form'>
               Cupid Picker</Link>
             </Button>
             <Text fontSize="sm" color="black.500" textAlign="center" mb={4}>
