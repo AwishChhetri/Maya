@@ -14,7 +14,7 @@ function Home() {
       <Heading as="h1" size="2xl" mt="12" pt={60}color='pink.400' >
          Cupid
       </Heading>
-      <Text fontSize="md" mt="4" color='black.400' pb={8}>The place to connect with the best match.</Text>
+      <Text fontSize="md" mt="4" color='black.400' pb={8}>The place to connect with the best people.</Text>
       <Button
               colorScheme="pink"
               bgGradient="linear(to-r, red.400, pink.400)"
