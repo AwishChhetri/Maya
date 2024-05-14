@@ -10,7 +10,7 @@ const Chat = ({ senderId, receiverId, receiverName, roomId }) => {
   const chatBoxRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io('https://puppy-mzmq.onrender.com');
+    const newSocket = io('http://cupidpuppy-env.eba-3rwswcn9.ap-south-1.elasticbeanstalk.com');
     setSocket(newSocket);
 
     return () => newSocket.disconnect();
