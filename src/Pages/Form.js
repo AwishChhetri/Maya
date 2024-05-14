@@ -196,7 +196,9 @@ const Form = () => {
 
       {/* Display an inline message if Picker status is false */}
       {pickerStatus === true && (
-        <Text color="red">Form already submitted.</Text>
+        <div>
+        <Text color="red" align="center">Form already submitted.</Text>
+        <Text color="gray.400">Cupid is constantly trying to find your match!</Text></div>
       )}
 
       {/* Render the form only if the test is not taken */}
