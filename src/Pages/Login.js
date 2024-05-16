@@ -48,10 +48,13 @@ function Login() {
                     const { token, student } = backendResponse.data; // Assuming the token and student data are returned from the backend response
                     localStorage.setItem('token', token); // Save token to localStorage
                     localStorage.setItem('_id', student._id); // Save student _id to localStorage
-                    // Token expiration time (5 hours in milliseconds)
-                    const expirationTime = Date.now() + 5 * 60 * 60 * 1000;
-                    localStorage.setItem('tokenExpiration', expirationTime); // Save token expiration time
-                    
+                    setTimeout(() => {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('_id');
+                        console.log("Token and student ID cleared from localStorage");
+                    }, 5 * 60 * 60 * 1000);
+
+
                     navigate('/a/board');
                     toast.success("Login successful!");
                 } else {
